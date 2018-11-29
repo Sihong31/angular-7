@@ -15,6 +15,8 @@ export class AuthInterceptor implements HttpInterceptor {
     // by default requests are immutable
     // const copiedReq = req.clone({ headers: req.headers.append('', '') });
     return this.store.select('auth')
+      // unsubscribes and completed observable after taking 1 value
+      .take(1)
       // switchMap to not wrap observable within another one
       .switchMap((authState: fromAuth.State) => {
         const copiedReq = req.clone({ params: req.params.set('auth', authState.token) });
